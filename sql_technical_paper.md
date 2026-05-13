@@ -499,3 +499,9 @@ EXECUTE FUNCTION set_updated_at();
 # Conclusion
 
 These concepts form the foundation of database design, SQL query optimization, concurrency control, and distributed systems. A strong understanding of them is essential for software engineering interviews and real-world application development.
+
+---
+
+## References
+
+- PostgreSQL Documentation – https://www.postgresql.org/docs/
