@@ -210,20 +210,6 @@ ON e.manager_id = m.emp_id;
 
 ---
 
-## JOIN USING
-
-Simplifies syntax when both tables share the same column name.
-
-```sql
-SELECT e.name,
-       d.dept_name
-FROM employees e
-JOIN departments d
-USING (dept_id);
-```
-
----
-
 # 4. Aggregations and Filters in Queries
 
 ## Definition
@@ -278,9 +264,14 @@ HAVING COUNT(*) > 5;
 
 ## Why Normalization Matters
 
-* Eliminates duplicate data
-* Prevents update anomalies
-* Improves consistency
+Without normalization, we get problems like:
+
+* Data duplication (redundancy)
+* Update anomalies
+* Insert anomalies
+* Delete anomalies
+
+Normalization solves all these issues.
 
 ## Normal Forms
 
@@ -416,21 +407,53 @@ LOCK TABLE employees IN EXCLUSIVE MODE;
 
 ## Isolation Levels
 
-### Read Uncommitted
+### 1. Read Uncommitted (Lowest Isolation)
 
-Allows dirty reads.
+Transactions can see uncommitted changes of others.
 
-### Read Committed (PostgreSQL Default)
+**Problem:**
+- Dirty reads allowed
 
-Prevents dirty reads.
+**Example:**
+- Transaction A updates salary but does NOT commit
+- Transaction B still reads that updated value (unsafe)
 
-### Repeatable Read
+**Not used in critical systems**
 
-Prevents non-repeatable reads.
+### 2. Read Committed (Most commonly used)
 
-### Serializable
+Only committed data is visible.
 
-Highest isolation level; transactions behave as if run one after another.
+**Prevents:**
+- Dirty reads
+
+**Allows:**
+- Non-repeatable reads
+- Phantom reads
+
+Default in many systems like PostgreSQL
+
+### 3. Repeatable Read
+
+If you read a row once, you will get the same value throughout the transaction.
+
+**Prevents:**
+- Dirty reads
+- Non-repeatable reads
+
+**Allows:**
+- Phantom reads
+
+### 4. Serializable (Highest Isolation)
+
+Strictest level. Transactions execute as if they run one after another (serially).
+
+**Prevents:**
+- Dirty reads
+- Non-repeatable reads
+- Phantom reads
+
+**Most safe but slowest**
 
 ## Example
 
